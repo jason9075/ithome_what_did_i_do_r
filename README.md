@@ -1,2 +1,2 @@
-# ithome_what_did_i_do_r
+# 我在公司都在幹啥R？ R語言資料分析經驗分享
 ithome 30天鐵人賽原始碼
