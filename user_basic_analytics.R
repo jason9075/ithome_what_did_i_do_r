@@ -33,4 +33,14 @@ result <- user %>%
 ggplot(result, aes(x=Month, y=MembersCount, fill=HasBought)) +
     geom_bar(stat="identity")
 
+### Day 4 ###
+
+result <- orders %>%
+    mutate(Month = as.Date(orders$CREATETIME, "%Y-%m-%d %H:%M:%S")) %>%
+    mutate(Month = substring(Month,1,7)) %>%
+    group_by(Month) %>%
+    summarise(Income = sum(PRICE))
+
+ggplot(result, aes(x=Month, y=Income)) +
+    geom_bar(stat="identity", fill="gold1")
 
