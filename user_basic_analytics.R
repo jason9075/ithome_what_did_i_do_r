@@ -1,7 +1,7 @@
 ### Day 2 ###
 user = read.csv("input/user.csv", stringsAsFactors=FALSE)
 
-#install.packages("stringr")
+#install.packages("dplyr")
 library(dplyr)
 
 result <- user %>%
@@ -43,4 +43,18 @@ result <- orders %>%
 
 ggplot(result, aes(x=Month, y=Income)) +
     geom_bar(stat="identity", fill="gold1")
+
+### Day 5 ###
+
+#install.packages("tidyr")
+library(tidyr)
+
+result <- orders %>%
+    mutate(Month = as.Date(orders$CREATETIME, "%Y-%m-%d %H:%M:%S")) %>%
+    mutate(Month = substring(Month,1,7)) %>%
+    separate(NAME, c("Category", "Brand"), sep="\\(") %>%
+    group_by(Month, Category) %>%
+    summarise(Income = sum(PRICE))
+    
+    
 
