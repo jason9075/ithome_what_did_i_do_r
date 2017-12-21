@@ -54,7 +54,10 @@ result <- orders %>%
     mutate(Month = substring(Month,1,7)) %>%
     separate(NAME, c("Category", "Brand"), sep="\\(") %>%
     group_by(Month, Category) %>%
-    summarise(Income = sum(PRICE))
-    
-    
+    summarise(Income = sum(PRICE)) %>%
+    spread(Category, Income, fill=0)
 
+category_sum = colSums(result[,-1])
+highest_category_index = which(category_sum==max(category_sum))
+print(paste0("Income最高的商品:",colnames(result[,-1])[highest_category_index]
+))
