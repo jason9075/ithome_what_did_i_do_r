@@ -78,3 +78,24 @@ ggplot(result, aes(x="", y=Category_Income, fill=Category)) +
     geom_bar(width = 1, stat = "identity") +
     coord_polar("y", start=0) +
     theme(text=element_text(family="黑體-繁 中黑", size=12)) 
+
+### day7 ###
+
+result <- orders %>%
+    mutate(Month = as.Date(orders$CREATETIME, "%Y-%m-%d %H:%M:%S")) %>%
+    mutate(Month = substring(Month,1,7)) %>%
+    group_by(Month) %>%
+    summarise(Income = sum(PRICE)) %>%
+    arrange(desc(Income))
+    
+result <- orders %>%
+    mutate(Month = as.Date(orders$CREATETIME, "%Y-%m-%d %H:%M:%S")) %>%
+    mutate(Month = substring(Month,1,7)) %>%
+    filter(Month=="2017-05"| Month=="2017-08"|Month=="2017-11",
+           PAYMENTTYPE=="信用卡") %>%
+    separate(NAME, c("Category", "Brand"), sep="\\(") %>%
+    group_by(Category) %>%
+    summarise(Category_Income = sum(PRICE)) %>%
+    arrange(desc(Category_Income))
+    
+
