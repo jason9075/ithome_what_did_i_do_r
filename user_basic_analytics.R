@@ -61,3 +61,20 @@ category_sum = colSums(result[,-1])
 highest_category_index = which(category_sum==max(category_sum))
 print(paste0("Income最高的商品:",colnames(result[,-1])[highest_category_index]
 ))
+
+## Day6 ###
+
+write.table(result, file="output/category_income_by_month.csv", sep = ",", row.names=FALSE, col.names = TRUE)
+
+category_income <- read.csv("output/category_income_by_month.csv", stringsAsFactors=FALSE)
+
+result <- category_income %>%
+    gather(Category, Income, 2:73, na.rm=FALSE) %>%
+    group_by(Category) %>%
+    summarise(Category_Income = sum(Income)) %>%
+    arrange(desc(Category_Income))
+
+ggplot(result, aes(x="", y=Category_Income, fill=Category)) +
+    geom_bar(width = 1, stat = "identity") +
+    coord_polar("y", start=0) +
+    theme(text=element_text(family="黑體-繁 中黑", size=12)) 
