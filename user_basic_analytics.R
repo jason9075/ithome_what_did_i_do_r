@@ -98,4 +98,12 @@ result <- orders %>%
     summarise(Category_Income = sum(PRICE)) %>%
     arrange(desc(Category_Income))
     
+### day8 ###
 
+result <- orders %>%
+    mutate(Month = as.Date(orders$CREATETIME, "%Y-%m-%d %H:%M:%S")) %>%
+    mutate(Month = substring(Month,1,7)) %>%
+    separate(NAME, c("Category", "Brand"), sep="\\(") %>%
+    filter(Month=="2017-05", Category=="生活家電", 450<PRICE) %>%
+    merge(user, by.x="BUYERID", by.y="ID") %>%
+    select(ID, PRICE, PAYMENTTYPE, ACCOUNT, MOBILE)
