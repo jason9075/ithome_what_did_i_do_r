@@ -123,5 +123,16 @@ result <- orders %>%
 
 write.table(result, file="output/apriori.csv", sep = ",", na = "", row.names=FALSE, col.names = FALSE)
 
+### day10 ###
 
+#install.packages("arules")
+library(arules)
+
+dataset = read.transactions('output/apriori.csv', sep = ',', rm.duplicates = TRUE)
+summary(dataset)
+par(family="黑體-繁 中黑") #避免圖表有中文亂碼
+itemFrequencyPlot(dataset, topN = 72, names = FALSE, support = 0.01)
+
+rules = apriori(data = dataset, parameter = list(support = 0.05, confidence = 0.01, minlen=2))
+inspect(sort(rules, by = 'lift')[1:10])
 
