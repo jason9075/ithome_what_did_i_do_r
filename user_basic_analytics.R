@@ -107,3 +107,21 @@ result <- orders %>%
     filter(Month=="2017-05", Category=="生活家電", 450<PRICE) %>%
     merge(user, by.x="BUYERID", by.y="ID") %>%
     select(ID, PRICE, PAYMENTTYPE, ACCOUNT, MOBILE)
+
+
+### day9 ###
+
+result <- orders %>%
+    separate(NAME, c("Category", "Brand"), sep="\\(") %>%
+    distinct(BUYERID, Category) %>%
+    group_by(BUYERID) %>%
+    mutate(row = row_number()) %>%
+    spread(row, Category) %>%
+    ungroup() %>%
+    select(-BUYERID) %>%
+    filter_at(2, all_vars(!is.na(.)))
+
+write.table(result, file="output/apriori.csv", sep = ",", na = "", row.names=FALSE, col.names = FALSE)
+
+
+
