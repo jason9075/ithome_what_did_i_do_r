@@ -18,3 +18,19 @@ while (theDate <= end){
     theDate <- theDate + 1                    
 }
 
+### Day 13 ###
+
+fruit_price_data <- list.files(path="downloaded/", pattern="*.csv", full.names=TRUE) %>% 
+    map_df(~read_csv(.))
+result <- fruit_price_data %>%
+    filter_at(1, any_vars(is.na(.))) %>%
+    select_at(-1) %>%
+    group_by(作物代號, 作物名稱) %>%
+    summarise(上價平均=mean(上價, na.rm = TRUE) ,
+                  中價平均=mean(中價, na.rm = TRUE) ,
+                  下價平均=mean(下價, na.rm = TRUE) ,
+                  總交易量=sum(交易量, na.rm = TRUE)) %>%
+    filter(200 < 上價平均) %>%
+    arrange(desc(總交易量))
+
+
