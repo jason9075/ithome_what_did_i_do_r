@@ -63,3 +63,40 @@ ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'),
     geom_point(data=result,
                size=1.8,
                aes(x=Lng, y=Lat, colour=factor(category)))
+### Day 17 ###
+
+set.seed(20180103)
+kmeans_3 = kmeans(x = address_LatLng_data[, c('Lat','Lng')], centers = 3)
+set.seed(20180103)
+kmeans_7 = kmeans(x = address_LatLng_data[, c('Lat','Lng')], centers = 7)
+set.seed(20180103)
+kmeans_10 = kmeans(x = address_LatLng_data[, c('Lat','Lng')], centers = 10)
+set.seed(20180103)
+kmeans_20 = kmeans(x = address_LatLng_data[, c('Lat','Lng')], centers = 20)
+
+result <- address_LatLng_data %>%
+    ungroup() %>%
+    mutate(category3 = kmeans_3$cluster,
+           category7 = kmeans_7$cluster,
+           category10 = kmeans_10$cluster,
+           category20 = kmeans_20$cluster)
+
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=result,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category3)))
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=result,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category7)))
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=result,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category10)))
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=result,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category20)))
+
+
+
