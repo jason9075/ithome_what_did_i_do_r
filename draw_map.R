@@ -47,4 +47,19 @@ result <- address_data %>%
 ggmap(google_map) +
     geom_point(data=result, aes(x=Lng, y=Lat), colour='red')
 
+### Day 16 ###
 
+address_LatLng_data <- result #將前一天的資料存到address_LatLng_data
+
+set.seed(20180102)
+kmeans = kmeans(x = address_LatLng_data[, c('Lat','Lng')], centers = 10)
+y_kmeans = kmeans$cluster
+
+result <- address_LatLng_data %>%
+    ungroup() %>%
+    mutate(category = y_kmeans)
+
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=result,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category)))
