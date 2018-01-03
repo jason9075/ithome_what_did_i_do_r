@@ -98,5 +98,71 @@ ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'),
                size=1.8,
                aes(x=Lng, y=Lat, colour=factor(category20)))
 
+### Day 18 ###
+
+rad = function(x) {
+    return (x * pi / 180)
+}
+
+getDistance = function(p1, p2) { #計算兩點經緯度距離 
+    R = 6378137; # 地球平均的半徑
+    dLat = rad(p2[1] - p1[1])
+    dLong = rad(p2[2] - p1[2])
+    a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(rad(p1[1])) * cos(rad(p2[1])) *
+        sin(dLong / 2) * sin(dLong / 2);
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    d = R * c
+    return (d) # 回傳公尺
+}
+
+isCenterDistanceOverThreshold <- function(center, df, threshold){ # threshold 單位是公尺
+    for (i in 1:nrow(df)) {
+        if(threshold < getDistance(center, c(df$Lat[i], df$Lng[i]))){
+            return(TRUE)
+        }
+    }
+    return(FALSE)
+}
+
+unclassifiedAddress <- address_LatLng_data %>% ungroup()
+classifiedAddresses <- address_LatLng_data[0,]
+
+SEED <- 20180103
+iterDistance <- c(300, 400, 500, 600, 700, 800, 1000)
+category = 1 #分類編號
+
+for(iter in 1:length(iterDistance)){
+    n = nrow(unclassifiedAddress) #未分類資料筆數
+    
+    if(n <= 5){
+        print("地址過少 無法分類")
+        break
+    }
+    
+    centersCount = as.integer(1 + 0.23*n) #預計產生的中心數
+    set.seed(SEED)
+    kmeans = kmeans(x = unclassifiedAddress[, c('Lat','Lng')], centers = centersCount)
+    y_kmeans = kmeans$cluster
+    y_centers = kmeans$centers
+    for(i in 1:centersCount){
+        subAddress <- unclassifiedAddress %>%
+            filter(y_kmeans==i)
+        
+        if(!isCenterDistanceOverThreshold(y_centers[i,], subAddress, iterDistance[iter])){
+            
+            subAddress$category <- category
+            category <- category + 1
+            
+            classifiedAddresses <- rbind(classifiedAddresses, subAddress)
+            next
+        }
+    }
+    unclassifiedAddress <- unclassifiedAddress %>% 
+        filter(!(V1 %in% classifiedAddresses$V1))
+    # ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    #     geom_point(data=addresses, aes(x=Lng, y=Lat, colour=factor(y_kmeans)))
+    print(paste0("iter-", iter," complete! remain:", nrow(unclassifiedAddress), " addresses"))
+}
 
 
