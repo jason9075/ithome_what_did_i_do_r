@@ -161,7 +161,9 @@ for(iter in 1:length(iterDistance)){
     unclassifiedAddress <- unclassifiedAddress %>% 
         filter(!(V1 %in% classifiedAddresses$V1))
     # ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
-    #     geom_point(data=addresses, aes(x=Lng, y=Lat, colour=factor(y_kmeans)))
+    #     geom_point(data=classifiedAddresses,
+    #                size=1.8,
+    #                aes(x=Lng, y=Lat, colour=factor(category)))
     print(paste0("iter-", iter," complete! remain:", nrow(unclassifiedAddress), " addresses"))
 }
 
