@@ -165,4 +165,23 @@ for(iter in 1:length(iterDistance)){
     print(paste0("iter-", iter," complete! remain:", nrow(unclassifiedAddress), " addresses"))
 }
 
+### Day 19 ###
 
+  # 一次K-means
+kmeans = kmeans(x = address_LatLng_data[, c('Lat','Lng')], centers = 24)
+y_kmeans = kmeans$cluster
+
+single_kmeans <- address_LatLng_data %>%
+    ungroup() %>%
+    mutate(category = y_kmeans)
+
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=single_kmeans,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category)))
+
+  # 多次K-means 
+ggmap(get_googlemap(center=c(121.52311,25.04126), zoom=12, maptype='satellite'), extent='device') +
+    geom_point(data=classifiedAddresses,
+               size=1.8,
+               aes(x=Lng, y=Lat, colour=factor(category)))
