@@ -1,44 +1,22 @@
 library(shiny)
 
-selection <- c("A", "B", "C")
-
 shinyUI(fluidPage(
 
     fluidRow(
-        column(4, 
-               div(style = "background-color: GreenYellow;",
-                   h4("黃綠區塊"),
-                   sliderInput('sampleSize', 'Sample Size',
-                               min=10, max=1000, value=500,
-                               step=10, round=0),
-                   br(),
-                   checkboxInput('check1', '勾選按鈕1'),
-                   checkboxInput('check2', '勾選按鈕2')
-                )
+        column(3, 
+               h4("過濾"),
+               sliderInput('price', '價格多少以上',
+                           min=0, max=12000, value=300,
+                           step=100, round=0),
+               selectInput('payment', '付款方式', c("信用卡", 
+                                                "ATM轉帳", 
+                                                "貨到付款", 
+                                                "現金", 
+                                                "無",
+                                                "其他"))
         ),
-        column(4, 
-               div(style = "background-color: Coral;",
-                   h4("橘色區塊"),
-                   selectInput('select1', '選擇1', selection),
-                   selectInput('select2', '選擇2', selection),
-                   selectInput('select3', '選擇3', selection),
-                   br(),
-                   numericInput("num", 
-                                h3("數字選擇"), 
-                                value = 1)
-               )
-        ),
-        column(4, 
-               div(style = "background-color: LightBlue;",
-                   h4("淡藍區塊"),
-                   actionButton("button", "按鈕"),
-                   br(),
-                   dateInput("date", 
-                             h3("Date input")),
-                   br(),
-                   textInput("text", h3("Text input"), 
-                             value = "Enter text...") 
-               )
+        column(9, 
+               tableOutput('ordersTable')
         )
     )
     

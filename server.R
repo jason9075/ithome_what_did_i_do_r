@@ -1,9 +1,14 @@
 library(shiny)
+library(dplyr)
+
+orders = read.csv("input/orders.csv", stringsAsFactors=FALSE, fileEncoding="big5")
 
 shinyServer(function(input, output) {
     
-    user = read.csv("input/user.csv", stringsAsFactors=FALSE)
-    output$userTable <- renderTable(user)
+    output$ordersTable <- renderTable({
+        orders %>%
+            filter(input$price < PRICE, input$payment == PAYMENTTYPE)
+    })
     
 })
 
