@@ -1,10 +1,9 @@
 getLatLng <- function(address){
  
-    urlData <- GET(paste0("https://maps.googleapis.com/maps/api/geocode/json?language=zh-TW&key=AIzaSyCwWPvfMJvZQU3HrKXIiQGPc55Xef_-nLc&address=", URLencode(address)))
-    # urlData <- GET(paste0("https://maps.googleapis.com/maps/api/geocode/json?language=zh-TW&address=", URLencode(address)))
+    urlData <- GET(paste0("https://maps.googleapis.com/maps/api/geocode/json?language=zh-TW&address=", URLencode(address)))
     
     jsonResult <- rjson::fromJSON(rawToChar(urlData$content))
-    # Sys.sleep(1)
+    Sys.sleep(1)
     if(jsonResult$status != "OK"){
         print(paste0("Google geocode API Error, Reason:", jsonResult$error_message))
         return("error")
