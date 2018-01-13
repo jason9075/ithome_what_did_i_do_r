@@ -5,17 +5,25 @@ library(ggplot2)
 library(ggmap)
 source("draw_map_function.R")
 
+getLatLngWithProcress = function(address, total, index) {
+    incProgress(1/total, detail = "解析地址中")
+    return (getLatLng(address))
+}
+
 shinyServer(function(input, output) {
     
     v <- reactiveValues(address = read.csv("input/address.csv", stringsAsFactors=FALSE, header=FALSE))
     
     observeEvent(input$request, {
-        v$addressWithLatLng <- v$address %>%
-            rowwise() %>%
-            mutate(LatLng = getLatLng(V1)) %>%
-            filter(LatLng!="error") %>%
-            separate(LatLng, c("Lat", "Lng"), sep=",") %>%
-            mutate(Lat=as.numeric(Lat), Lng=as.numeric(Lng))
+        withProgress(message = '擷取經緯度', value = 0, {
+            v$addressWithLatLng <- v$address %>%
+                rowwise() %>%
+                mutate(LatLng = getLatLngWithProcress(V1, nrow(v$address), row_number())) %>%
+                filter(LatLng!="error") %>%
+                separate(LatLng, c("Lat", "Lng"), sep=",") %>%
+                mutate(Lat=as.numeric(Lat), Lng=as.numeric(Lng))
+
+        })
     })  
     
     observeEvent(input$do, {
