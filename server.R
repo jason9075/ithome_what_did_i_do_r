@@ -5,7 +5,7 @@ library(ggplot2)
 library(ggmap)
 source("draw_map_function.R")
 
-getLatLngWithProcress = function(address, total, index) {
+getLatLngWithProcress = function(address, total) {
     incProgress(1/total, detail = "解析地址中")
     return (getLatLng(address))
 }
@@ -18,7 +18,7 @@ shinyServer(function(input, output) {
         withProgress(message = '擷取經緯度', value = 0, {
             v$addressWithLatLng <- v$address %>%
                 rowwise() %>%
-                mutate(LatLng = getLatLngWithProcress(V1, nrow(v$address), row_number())) %>%
+                mutate(LatLng = getLatLngWithProcress(V1, nrow(v$address))) %>%
                 filter(LatLng!="error") %>%
                 separate(LatLng, c("Lat", "Lng"), sep=",") %>%
                 mutate(Lat=as.numeric(Lat), Lng=as.numeric(Lng))
