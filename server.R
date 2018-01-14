@@ -3,12 +3,16 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(ggmap)
+library(stringr)
 source("draw_map_function.R")
 
 getLatLngWithProcress = function(address, total) {
     incProgress(1/total, detail = "解析地址中")
     return (getLatLng(address))
 }
+
+orders = read.csv("input/orders.csv", stringsAsFactors=FALSE, fileEncoding="big5")
+user = read.csv("input/user.csv", stringsAsFactors=FALSE)
 
 shinyServer(function(input, output) {
     
@@ -54,5 +58,17 @@ shinyServer(function(input, output) {
                        size=1.8,
                        aes(x=Lng, y=Lat, colour=factor(category)))
     })
+    
+    output$ordersTable <- renderTable({
+        orders %>%
+            filter(input$price < PRICE, input$payment == PAYMENTTYPE)
+    })
+    
+    output$userTable <- renderTable({
+        if(input$phone_number=="") return(user)
+        user %>%
+            filter(str_detect(MOBILE, input$phone_number))
+    })
+    
 })
 
