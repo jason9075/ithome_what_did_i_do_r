@@ -3,11 +3,11 @@ ithome 30天鐵人賽原始碼
 
 
 # 30天大雜燴
-[【01】前言、先備技能需求以及環境介紹 ](https://ithelp.ithome.com.tw/articles/10192035)
+[【01】前言、先備技能需求以及環境介紹 ](https://ithelp.ithome.com.tw/articles/10192035)\s
 
-dplyr系列：
-[【02】當老闆想問：話說我們的會員註冊情況如何時？](https://ithelp.ithome.com.tw/articles/10192200)
-[【03】當老闆再問：嗯...話說我們已註冊的會員中有多少人有消費過的？](https://ithelp.ithome.com.tw/articles/10192384)
+dplyr系列：\s
+[【02】當老闆想問：話說我們的會員註冊情況如何時？](https://ithelp.ithome.com.tw/articles/10192200)\s
+[【03】當老闆再問：嗯...話說我們已註冊的會員中有多少人有消費過的？](https://ithelp.ithome.com.tw/articles/10192384)\s
 [【04】當老闆想問：話說...經營至今，我們的每個月的營收狀況如何啊？](https://ithelp.ithome.com.tw/articles/10192697)
 [【05】當老闆說了：喔喔喔！那這些月營收之中，又是哪些東西賣的最好啊?](https://ithelp.ithome.com.tw/articles/10192911)
 [【06】當老闆問說：嗯...營收最好的是掌上型電玩啊，那第二、第三名呢？能畫個圖嗎？](https://ithelp.ithome.com.tw/articles/10193288)
